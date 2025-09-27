@@ -1,0 +1,17 @@
+[
+  {
+    "title": "A Sample Paper on AI-driven Assessments",
+    "authors": "A. Kehar, H. Student",
+    "venue": "Proceedings of ExampleConf",
+    "year": "2025",
+    "pdf": "files/publications/2025-ai-assessments.pdf",
+    "url": "https://example.org/papers/2025-ai-assessments"
+  },
+  {
+    "title": "Another Paper",
+    "authors": "A. Kehar",
+    "venue": "Journal of Examples",
+    "year": "2024",
+    "pdf": "files/publications/2024-another-paper.pdf"
+  }
+]
