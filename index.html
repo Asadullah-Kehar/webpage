@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dr. Asadullah Kehar — Faculty | Publications, Teaching, Research</title>
+  <meta name="description" content="Academic page for Dr. Asadullah Kehar — publications, teaching materials, CV, contact." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <img src="images/profile.jpg" alt="Profile photo" class="avatar" onerror="this.style.display='none'" />
+        <div>
+          <h1>Dr. Asadullah Kehar</h1>
+          <p class="subtitle">Assistant Professor &amp; Researcher — Computer Science</p>
+        </div>
+      </div>
+
+      <button id="nav-toggle" class="nav-toggle" aria-expanded="false">☰</button>
+
+      <nav id="main-nav" class="main-nav" aria-label="Main navigation">
+        <a href="#about">About</a>
+        <a href="#publications">Publications</a>
+        <a href="#teaching">Teaching</a>
+        <a href="#research">Research</a>
+        <a href="#cv">CV</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="container">
+    <section id="about" class="card">
+      <h2>About</h2>
+      <p>
+        Welcome — short bio goes here. Replace this paragraph with your faculty bio: research interests, current position, contact email, and brief statement of expertise.
+      </p>
+      <p>
+        Example: "I am an Assistant Professor at [University], working on human–computer interaction, AI in education, and data science."
+      </p>
+      <p>
+        <strong>Contact:</strong> <a href="mailto:asadullah.kehar@example.com">asadullah.kehar@example.com</a>
+      </p>
+    </section>
+
+    <section id="publications" class="card">
+      <h2>Publications</h2>
+      <p class="muted">Below is a machine-friendly list that will render from <code>/data/publications.json</code> if present. Otherwise a small example list is shown.</p>
+
+      <div id="pub-list"></div>
+
+      <details>
+        <summary>How to add a new publication</summary>
+        <ol>
+          <li>Upload the PDF to <code>/files/publications/</code> and use a short filename like <code>2025-icml-example.pdf</code>.</li>
+          <li>Add an entry to <code>/data/publications.json</code> (see sample below).</li>
+          <li>Commit &amp; push. The page will automatically display the new entry.</li>
+        </ol>
+      </details>
+    </section>
+
+    <section id="teaching" class="card">
+      <h2>Teaching</h2>
+      <p>List of recent or current courses and resources. Upload slides, assignments and code in <code>/files/teaching/</code>.</p>
+      <ul>
+        <li>
+          <strong>CS101 — Intro to Programming</strong> — <a href="files/teaching/CS101-slides.zip">slides (zip)</a> • <a href="#">syllabus</a>
+        </li>
+        <li>
+          <strong>CS202 — Data Science</strong> — <a href="files/teaching/DS202-notes.pdf">lecture notes</a>
+        </li>
+      </ul>
+    </section>
+
+    <section id="research" class="card">
+      <h2>Research</h2>
+      <p>Short description of research interests, projects, and links to datasets or code repositories.</p>
+      <ul>
+        <li>Project: AI-driven assessments — <a href="#">GitHub</a></li>
+        <li>Dataset: Student-interaction-logs — <a href="#">Download</a></li>
+      </ul>
+    </section>
+
+    <section id="cv" class="card">
+      <h2>Curriculum Vitae</h2>
+      <p>Download my CV: <a href="files/CV.pdf" target="_blank" rel="noopener">CV (PDF)</a></p>
+      <iframe src="files/CV.pdf" title="CV" class="pdf-frame" onerror="this.style.display='none'"></iframe>
+    </section>
+
+    <section id="contact" class="card">
+      <h2>Contact</h2>
+      <p>Email: <a href="mailto:asadullah.kehar@example.com">asadullah.kehar@example.com</a></p>
+
+      <form id="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <label>
+          Your name<br>
+          <input type="text" name="name" required>
+        </label>
+        <label>
+          Your email<br>
+          <input type="email" name="email" required>
+        </label>
+        <label>
+          Message<br>
+          <textarea name="message" rows="4" required></textarea>
+        </label>
+        <button type="submit">Send</button>
+        <p class="muted">(Alternatively use the mailto link above.)</p>
+      </form>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© <span id="year"></span> Dr. Asadullah Kehar — <a href="#">Privacy</a></p>
+    </div>
+  </footer>
+
+  <script>
+    // small helpers
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // mobile nav toggle
+    const navToggle = document.getElementById('nav-toggle');
+    const mainNav = document.getElementById('main-nav');
+    navToggle.addEventListener('click', () => {
+      const expanded = navToggle.getAttribute('aria-expanded') === 'true';
+      navToggle.setAttribute('aria-expanded', String(!expanded));
+      mainNav.classList.toggle('open');
+    });
+
+    // load publications from /data/publications.json if available
+    async function loadPublications() {
+      const container = document.getElementById('pub-list');
+      try {
+        const res = await fetch('data/publications.json', {cache: 'no-store'});
+        if (!res.ok) throw new Error('No publications.json found');
+        const pubs = await res.json();
+        if (!Array.isArray(pubs) || pubs.length === 0) throw new Error('Empty publications.json');
+
+        const ul = document.createElement('ul');
+        pubs.forEach(p => {
+          const li = document.createElement('li');
+          const title = document.createElement('strong');
+          title.textContent = p.title;
+          li.appendChild(title);
+
+          if (p.authors) li.insertAdjacentText('beforeend', ' — ' + p.authors);
+          if (p.venue) li.insertAdjacentText('beforeend', ' (' + p.venue + ', ' + (p.year || '') + ')');
+
+          if (p.pdf) {
+            const a = document.createElement('a');
+            a.href = p.pdf;
+            a.textContent = ' [pdf]';
+            a.target = '_blank';
+            a.rel = 'noopener';
+            li.appendChild(a);
+          }
+
+          if (p.url) {
+            const b = document.createElement('a');
+            b.href = p.url;
+            b.textContent = ' [link]';
+            b.target = '_blank';
+            b.rel = 'noopener';
+            li.appendChild(b);
+          }
+
+          ul.appendChild(li);
+        });
+        container.appendChild(ul);
+      } catch (err) {
+        // fallback example
+        container.innerHTML = `
+          <ul>
+            <li><strong>Example: A sample paper title</strong> — A. Kehar, B. Researcher (Conference 2025) <a href="files/publications/example-paper.pdf" target="_blank">[pdf]</a></li>
+            <li><strong>Example: Another paper</strong> — A. Kehar (Journal 2024) <a href="files/publications/another-paper.pdf" target="_blank">[pdf]</a></li>
+          </ul>
+        `;
+      }
+    }
+
+    loadPublications();
+  </script>
+</body>
+</html>
